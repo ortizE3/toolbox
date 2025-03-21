@@ -1,0 +1,30 @@
+:root {
+  font-family: "Archivo Black";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1em;
+  --red-toolbox: rgb(206, 31, 0);
+  --light-toolbox: #f3f3e1;
+  --dark-toolbox: #212121;
+
+  color-scheme: light dark;
+  color: rgb(206, 31, 0);
+  background-color: #f3f3e1;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  max-height: 25px;
+  background-color: #ce1f00;
+  border-radius: 10px;
+  border: none;
+  padding: 5px 10px;
+}
