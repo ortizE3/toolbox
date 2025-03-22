@@ -7,6 +7,11 @@ import { createStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import App from './App.tsx'
 
+import './Classes/button.css';
+import './Classes/input.css';
+import './Classes/textarea.css';
+import './Classes/hr.css';
+
 import './index.css'
 
 declare global {

@@ -15,9 +15,6 @@ import { GetUserCompleted } from './Actions/UserActions'
 function App() {
   const { isAuthenticated, isLoading, user } = useAuth0();
   const dispatch = useDispatch()
-  if (isLoading) {
-    return <Loading />;
-  }
 
   useEffect(() => {
     if (user && user.sub) {
@@ -40,6 +37,9 @@ function App() {
       });
     }
   }, [user])
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>

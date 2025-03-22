@@ -1,19 +1,18 @@
+import { AppState } from "@auth0/auth0-react";
 import { UserActions } from "../Models/Actions/UserActions";
 import { ReducerAction } from "../Models/Reducer/ReducerAction";
 import { User } from "../Models/User/User";
 
-const initialState: User = {
-    id: "",
-    name: "",
-    email: ""
+const initialState: AppState = {
+    user: null
 }
 
-const UserReducer = (user: User = initialState, action: ReducerAction<User>) => {
+const UserReducer = (state: AppState = initialState, action: ReducerAction<User>) => {
     switch (action.type) {
         case UserActions.getUser:
-            return { ...user, ...action.payload }
+            return { ...state, ...action.payload }
         default:
-            return user;
+            return state;
     }
 };
 

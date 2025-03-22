@@ -1,0 +1,24 @@
+button {
+    max-height: 25px;
+    background-color: var(--red-toolbox);
+    border-radius: 10px;
+    border: none;
+    padding: 5px 10px;
+    transition: all .3s ease-in-out;
+}
+
+button:hover {
+    background-color: #000af7;
+    scale: 1.05;
+}
+
+button:disabled {
+    background-color: grey;
+    color: #ccc;
+    pointer-events: none;
+    /* Disables interactions */
+    opacity: 0.5;
+    /* Makes it look grayed out */
+    cursor: not-allowed;
+    /* Change cursor to indicate it's disabled */
+}

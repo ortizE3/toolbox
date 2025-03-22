@@ -4,12 +4,13 @@
   font-style: normal;
   font-size: 1em;
   --red-toolbox: rgb(206, 31, 0);
+  --yellow-toolbox: #f7ca7a;
   --light-toolbox: #f3f3e1;
   --dark-toolbox: #212121;
 
   color-scheme: light dark;
-  color: rgb(206, 31, 0);
-  background-color: #f3f3e1;
+  color: var(--red-toolbox);
+  background-color: var(--light-toolbox);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,10 +22,6 @@ body {
   margin: 0;
 }
 
-button {
-  max-height: 25px;
-  background-color: #ce1f00;
-  border-radius: 10px;
-  border: none;
-  padding: 5px 10px;
+.hide {
+  visibility: hidden;
 }

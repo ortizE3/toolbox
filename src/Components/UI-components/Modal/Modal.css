@@ -1,0 +1,23 @@
+.modal-background {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    backdrop-filter: blur(15px);
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 1s ease-in-out;
+}
+
+.modal-container {
+    border: black solid 1px;
+    color: var(--dark-toolbox);
+    width: auto;
+    height: auto;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 1280px;
+}

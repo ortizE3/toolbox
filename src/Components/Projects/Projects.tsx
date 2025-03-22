@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
-import { Project } from "../../Models/Projects/Project";
-import { fetchProjectData } from "../services/ProjectService/ProjectService";
+import { useState } from "react";
+import CreateProjectModal from "../CreateProjectModal/CreateProjectModal";
 
 function Projects() {
-    const [data, setData] = useState<Project[] | null>(null);
-    useEffect(() => {
-    }, []);
+    const [showCreateProject, setShowCreateProject] = useState<boolean>(false);
+
+    const toggleOnCreateProject = () => {
+        setShowCreateProject(true)
+    }
 
     return (
-        <div>Projects</div>
+        <div>
+            <button onClick={toggleOnCreateProject}>Create Project</button>
+            {showCreateProject && <CreateProjectModal open={setShowCreateProject} />}
+        </div>
     )
 }
 

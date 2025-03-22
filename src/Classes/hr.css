@@ -1,0 +1,5 @@
+hr {
+    width: 100%;
+    color: var(--dark-toolbox);
+    border: black solid 1px;
+}
