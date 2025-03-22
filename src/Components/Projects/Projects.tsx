@@ -5,16 +5,6 @@ import { fetchProjectData } from "../services/ProjectService/ProjectService";
 function Projects() {
     const [data, setData] = useState<Project[] | null>(null);
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const result = await fetchProjectData();
-                console.log(result)
-                setData(result);
-            } catch (err) {
-                console.log(err)
-            }
-        };
-        getData();
     }, []);
 
     return (

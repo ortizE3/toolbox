@@ -6,12 +6,40 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 import './App.css'
 import Loading from './Components/Loading/Loading'
+import { useEffect } from 'react'
+import { CreateUser, GetUser } from './Components/services/UserService.ts/UserService'
+import { CreateUserRequest } from './Models/User/CreateUserRequest'
+import { useDispatch } from 'react-redux'
+import { GetUserCompleted } from './Actions/UserActions'
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated, isLoading, user } = useAuth0();
+  const dispatch = useDispatch()
   if (isLoading) {
     return <Loading />;
   }
+
+  useEffect(() => {
+    if (user && user.sub) {
+      GetUser(user.sub).then((data) => {
+        dispatch(GetUserCompleted(data))
+      }).catch(() => {
+        if (user &&
+          user.sub &&
+          user.email &&
+          user.name) {
+          let request: CreateUserRequest = {
+            id: user.sub,
+            email: user.email,
+            name: user.name
+          }
+          CreateUser(request).catch((err) => {
+            console.error('User could not be created', err)
+          });
+        }
+      });
+    }
+  }, [user])
 
   return (
     <div>
