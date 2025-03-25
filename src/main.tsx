@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { Auth0Provider } from '@auth0/auth0-react'
 import { BrowserRouter } from 'react-router'
 import AllReducers from './Reducers/AllReducers.ts'
-import { createStore } from '@reduxjs/toolkit'
-import { Provider } from 'react-redux'
+import { applyMiddleware, createStore } from '@reduxjs/toolkit'
+import { Provider, useDispatch } from 'react-redux'
 import App from './App.tsx'
-
+import { thunk } from 'redux-thunk';
 import './Classes/button.css';
 import './Classes/input.css';
 import './Classes/textarea.css';
@@ -20,8 +20,17 @@ declare global {
   }
 }
 
+
+
 const appState = createStore(AllReducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : undefined)
+  applyMiddleware(thunk));
+
+
+
+export type RootState = ReturnType<typeof appState.getState>;
+export type AppDispatch = typeof appState.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

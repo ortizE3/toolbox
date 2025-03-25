@@ -1,12 +1,12 @@
 export class Project {
     constructor() {
-        this.id = ""
+        this.projectId = ""
         this.description = "";
         this.title = ""
         this.userId = ""
     }
 
-    id: string;
+    projectId: string;
     userId: string;
     description: string;
     title: string;

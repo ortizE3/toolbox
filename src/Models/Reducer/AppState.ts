@@ -1,3 +1,4 @@
+import { Project } from "../Projects/Project"
 import { User } from "../User/User"
 
 const initialState: User = {
@@ -9,5 +10,6 @@ const initialState: User = {
 
 
 export class AppState {
-    user: User = initialState
+    user: User = initialState;
+    projects: Project[] = [];
 }

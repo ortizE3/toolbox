@@ -13,3 +13,22 @@ export const CreateProject = async (request: CreateProjectRequest): Promise<Proj
         throw error;
     }
 };
+
+export const GetAllProjects = async (userId: string): Promise<Project[]> => {
+    try {
+        const response = await axios.get<Project[]>(`${API_BASE_URL}/Project?userId=${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error Getting All project data:", error);
+        throw error;
+    }
+};
+
+export const DeleteProject = async (projectId: string): Promise<void> => {
+    try {
+        await axios.delete(`${API_BASE_URL}/Project?projectId=${projectId}`);
+    } catch (error) {
+        console.error(`Error Deleting project ${projectId}:`, error);
+        throw error;
+    }
+};

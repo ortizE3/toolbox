@@ -3,12 +3,13 @@ import { CreateProjectProps } from '../../Models/ComponentProps/CreateProjectPro
 import Modal from '../UI-components/Modal/Modal'
 import ERROR from '../../Constants/ConstantErrors';
 import { CreateProject } from '../services/ProjectService/ProjectService';
-import { Project } from '../../Models/Projects/Project';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './CreateProjectModal.css'
 import { AppState } from '../../Models/Reducer/AppState';
 import { CreateProjectRequest } from '../../Models/Projects/CreateProjectRequest';
+import { GetProjects } from '../../Actions/ProjectActions';
+import { useAppDispatch } from '../../main';
 
 function CreateProjectModal(props: CreateProjectProps) {
 
@@ -18,6 +19,7 @@ function CreateProjectModal(props: CreateProjectProps) {
     const [descriptionError, setDescriptionError] = useState<string>("");
     const [canCreate, setCanCreate] = useState<boolean>(false);
     const user = useSelector((state: AppState) => state.user);
+    const appDispatch = useAppDispatch();
 
     useEffect(() => {
         if (!titleError && !descriptionError &&
@@ -56,7 +58,13 @@ function CreateProjectModal(props: CreateProjectProps) {
                 userId: user.id
             };
 
-            CreateProject(request)
+            CreateProject(request).then(() => {
+                console.log('project created')
+                props.open(false);
+                appDispatch(GetProjects(user.id))
+            }).catch(() => {
+                console.log('project creation failed')
+            })
         }
     }
 

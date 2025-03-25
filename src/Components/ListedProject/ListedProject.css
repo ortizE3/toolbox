@@ -1,0 +1,15 @@
+.listed-project-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: solid black 1px;
+    border-radius: 10px;
+    padding: 10px;
+    color: var(--dark-toolbox)
+}
+
+.listed-project-button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
