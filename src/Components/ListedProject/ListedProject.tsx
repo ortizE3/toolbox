@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Project } from "../../Models/Projects/Project"
 
 import './ListedProject.css'

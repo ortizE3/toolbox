@@ -8,7 +8,9 @@ function Modal(props: ModalProps) {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (ref.current && !ref.current.contains(event.target as Node)) {
+            const element = event.target as HTMLElement;
+
+            if (ref.current && event?.target && ref.current.id === element.id) {
                 props.open(false);
             }
         };
@@ -20,8 +22,8 @@ function Modal(props: ModalProps) {
     }, []);
 
     return (
-        <div className="modal-background">
-            <div className='modal-container' ref={ref}>
+        <div className="modal-background" id="modal-container" ref={ref}>
+            <div className='modal-container' >
                 {props.children}
             </div>
         </div>

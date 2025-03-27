@@ -1,11 +1,8 @@
 export class CreateProjectRequest {
-    constructor() {
-        this.description = "";
-        this.title = ""
-        this.userId = ""
-    }
-
-    userId: string;
-    description: string;
-    title: string;
+    userId: string = '';
+    description: string = '';
+    title: string = '';
+    latitude: number = 0;
+    longitude: number = 0;
+    address: string = '';
 }
