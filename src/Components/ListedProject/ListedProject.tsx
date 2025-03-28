@@ -1,15 +1,19 @@
 import { Project } from "../../Models/Projects/Project"
-
-import './ListedProject.css'
 import { DeleteProject } from "../services/ProjectService/ProjectService"
 import { useAppDispatch } from "../../main"
 import { GetProjects } from "../../Actions/ProjectActions"
 import { useSelector } from "react-redux"
 import { AppState } from "../../Models/Reducer/AppState"
-function ListedProject(props: Project) {
 
+import './ListedProject.css'
+import { useState } from "react"
+import ProjectModal from "../ProjectModal/ProjectModal"
+
+function ListedProject(props: Project) {
+    const [openEdit, setOpenEdit] = useState<boolean>(false);
     const appDispatch = useAppDispatch();
     const user = useSelector((state: AppState) => state.user)
+
     const deleteProjectHandler = () => {
         if (props.projectId && user.id) {
             DeleteProject(props.projectId).then(() => {
@@ -20,15 +24,21 @@ function ListedProject(props: Project) {
         }
     }
 
+    const editProjectHandler = () => {
+        setOpenEdit(true)
+    }
+
     return (
         <div className="listed-project-container ">
             <div>{props.title}</div>
             <div>{props.description}</div>
             <div>{props.projectId}</div>
+            <div>{props.address}</div>
             <div className="listed-project-button-group">
-                <button>Edit</button>
+                <button onClick={editProjectHandler}>Edit</button>
                 <button onClick={deleteProjectHandler}>Cancel</button>
             </div>
+            {openEdit && <ProjectModal open={setOpenEdit} isEdit={true} project={props} />}
         </div>
     )
 }

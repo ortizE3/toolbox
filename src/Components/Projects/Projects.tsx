@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import CreateProjectModal from "../CreateProjectModal/CreateProjectModal";
 import { useSelector } from "react-redux";
 import { GetProjects } from "../../Actions/ProjectActions";
 import { Project } from "../../Models/Projects/Project";
@@ -8,6 +7,7 @@ import { useAppDispatch } from "../../main";
 import ListedProject from "../ListedProject/ListedProject";
 
 import './Projects.css'
+import ProjectModal from "../ProjectModal/ProjectModal";
 
 function Projects() {
     const [showCreateProject, setShowCreateProject] = useState<boolean>(false);
@@ -28,7 +28,7 @@ function Projects() {
     return (
         <div>
             <button onClick={toggleOnCreateProject}>Create Project</button>
-            {showCreateProject && <CreateProjectModal open={setShowCreateProject} />}
+            {showCreateProject && <ProjectModal open={setShowCreateProject} />}
             {projects &&
                 <div className="project-list-container">
                     {projects.map((project: Project) => {

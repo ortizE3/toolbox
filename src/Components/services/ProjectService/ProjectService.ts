@@ -32,3 +32,12 @@ export const DeleteProject = async (projectId: string): Promise<void> => {
         throw error;
     }
 };
+
+export const UpdateProject = async (updatedProject: Project): Promise<void> => {
+    try {
+        await axios.patch(`${API_BASE_URL}/Project`, updatedProject);
+    } catch (error) {
+        console.error(`Error Updating project ${updatedProject}:`, error);
+        throw error;
+    }
+};

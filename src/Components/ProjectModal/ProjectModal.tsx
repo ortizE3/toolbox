@@ -1,24 +1,25 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { CreateProjectProps } from '../../Models/ComponentProps/CreateProjectProps'
+import { ProjectModalProps } from '../../Models/ComponentProps/ProjectModalProps'
 import Modal from '../UI-components/Modal/Modal'
 import ERROR from '../../Constants/ConstantErrors';
-import { CreateProject } from '../services/ProjectService/ProjectService';
+import { CreateProject, UpdateProject } from '../services/ProjectService/ProjectService';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../Models/Reducer/AppState';
 import { CreateProjectRequest } from '../../Models/Projects/CreateProjectRequest';
 import { GetProjects } from '../../Actions/ProjectActions';
 import { useAppDispatch } from '../../main';
 import GoogleAutoComplete from '../GoogleAutoComplete/GoogleAutoComplete';
-
-import './CreateProjectModal.css'
 import { getGeocode, getLatLng } from 'use-places-autocomplete';
-import { Coordinates } from '../../Models/Shared/coordinates';
+import { Coordinates } from '../../Models/Shared/Coordinates'
 
-function CreateProjectModal(props: CreateProjectProps) {
+import './ProjectModal.css'
+import { Project } from '../../Models/Projects/Project';
 
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
-    const [address, setAddress] = useState<string>();
+function ProjectModal(props: ProjectModalProps) {
+
+    const [title, setTitle] = useState<string>(props.project?.title ?? '');
+    const [description, setDescription] = useState<string>(props.project?.description ?? '');
+    const [address, setAddress] = useState<string>('');
     const [coordinates, setCoordinates] = useState<Coordinates>();
     const user = useSelector((state: AppState) => state.user);
 
@@ -85,7 +86,7 @@ function CreateProjectModal(props: CreateProjectProps) {
         }
     }
 
-    const createProject = () => {
+    const createProjectHandler = () => {
         if (canCreate && coordinates && address) {
             let request: CreateProjectRequest = {
                 title: title,
@@ -106,10 +107,41 @@ function CreateProjectModal(props: CreateProjectProps) {
         }
     }
 
+
+    const UpdateProjectHandler = () => {
+        if (canCreate && coordinates && address && props?.project?.projectId) {
+            let request: Project = {
+                projectId: props.project?.projectId,
+                title: title,
+                description: description,
+                userId: user.id,
+                latitude: coordinates?.lat,
+                longitude: coordinates?.lng,
+                address: address
+            };
+
+            UpdateProject(request).then(() => {
+                console.log('project updated')
+                props.open(false);
+                appDispatch(GetProjects(user.id))
+            }).catch(() => {
+                console.log('project update failed')
+            })
+        }
+    }
+
+    const onClickHandler = () => {
+        if (props && props.isEdit) {
+            UpdateProjectHandler();
+        } else {
+            createProjectHandler();
+        }
+    }
+
     return (
         <Modal open={props.open}>
             <div className="project-create-container">
-                <h2 className='create-project-header'>Create A Project</h2>
+                <h2 className='create-project-header'>{props.isEdit ? 'Edit' : 'Create A'} Project</h2>
                 <hr />
                 <div className='input-container'>
                     <label htmlFor="name">Title of the project</label>
@@ -139,7 +171,7 @@ function CreateProjectModal(props: CreateProjectProps) {
                 </div>
                 <hr />
                 <div className='button-container'>
-                    <button disabled={!canCreate} onClick={createProject}>Create Project</button>
+                    <button disabled={!canCreate} onClick={onClickHandler}>{props.isEdit ? 'Edit' : 'Create'} Project</button>
                     <button onClick={() => props.open(false)}>Cancel</button>
                 </div>
             </div>
@@ -147,4 +179,4 @@ function CreateProjectModal(props: CreateProjectProps) {
     )
 }
 
-export default CreateProjectModal
+export default ProjectModal

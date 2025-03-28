@@ -3,6 +3,7 @@ export class Project {
     userId: string = '';
     description: string = '';
     title: string = '';
-    latitude: string = '';
-    longitude: string = '';
+    latitude: number = 0;
+    longitude: number = 0;
+    address: string = '';
 }
