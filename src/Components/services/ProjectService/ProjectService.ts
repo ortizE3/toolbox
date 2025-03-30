@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Project } from "../../../Models/Projects/Project";
 import { CreateProjectRequest } from "../../../Models/Projects/CreateProjectRequest";
+import { QueryProjectsRequest } from "../../../Models/Projects/QueryProjectRequest";
 
 const API_BASE_URL = "https://localhost:7284";
 
@@ -41,3 +42,13 @@ export const UpdateProject = async (updatedProject: Project): Promise<void> => {
         throw error;
     }
 };
+
+export const QueryProjects = async (queryProjectsRequest: QueryProjectsRequest): Promise<Project[]> => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/Project/search`, queryProjectsRequest);
+        return response.data
+    } catch (error) {
+        console.error(`Error searching projects:`, error);
+        throw error;
+    }
+}

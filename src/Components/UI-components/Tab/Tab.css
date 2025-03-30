@@ -1,0 +1,18 @@
+.tab-container {
+    border-bottom: 2px solid var(--dark-toolbox);
+    border-radius: 0px;
+    background-color: transparent;
+    color: var(--dark-toolbox);
+    font-size: .9em;
+}
+
+.tab-container:hover {
+    background-color: var(--light-secondary-toolbox);
+    scale: unset;
+}
+
+.tab-container-active {
+    background-color: var(--light-secondary-toolbox);
+    color: var(--red-toolbox);
+    border-color: var(--red-toolbox);
+}

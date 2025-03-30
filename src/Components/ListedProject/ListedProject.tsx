@@ -38,7 +38,7 @@ function ListedProject(props: Project) {
                 <button onClick={editProjectHandler}>Edit</button>
                 <button onClick={deleteProjectHandler}>Cancel</button>
             </div>
-            {openEdit && <ProjectModal open={setOpenEdit} isEdit={true} project={props} />}
+            <ProjectModal open={openEdit} openHandler={setOpenEdit} isEdit={true} project={props} />
         </div>
     )
 }

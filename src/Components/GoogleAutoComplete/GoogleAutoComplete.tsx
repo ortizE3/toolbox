@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useJsApiLoader, StandaloneSearchBox, Libraries } from "@react-google-maps/api";
 import { GoogleAutoCompleteProps } from "../../Models/ComponentProps/GoogleAutoCompleteProps";
 
@@ -9,6 +9,7 @@ const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS;
 
 
 const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
+    const [text, setText] = useState<string>(props.text)
     const inputRef: any = useRef(null)
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -25,16 +26,19 @@ const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
             {
                 isLoaded &&
                 <>
-                    <label htmlFor="address" >Location</label>
                     <StandaloneSearchBox onLoad={(ref) => inputRef.current = ref} onPlacesChanged={onAddressChange}>
                         <input
                             className={`google-auto-complete-input ${props.className}`}
                             type="text"
                             id="address"
                             name="address"
+                            value={text}
+                            onChange={(e) => { setText(e.target.value) }}
                             placeholder=""
                         />
                     </StandaloneSearchBox>
+                    <label>Set as Default?</label>
+                    <input type="checkbox"></input>
                 </>
             }
         </>

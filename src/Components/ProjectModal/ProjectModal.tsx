@@ -19,7 +19,7 @@ function ProjectModal(props: ProjectModalProps) {
 
     const [title, setTitle] = useState<string>(props.project?.title ?? '');
     const [description, setDescription] = useState<string>(props.project?.description ?? '');
-    const [address, setAddress] = useState<string>('');
+    const [address, setAddress] = useState<string>(props.project?.address ?? '');
     const [coordinates, setCoordinates] = useState<Coordinates>();
     const user = useSelector((state: AppState) => state.user);
 
@@ -99,7 +99,7 @@ function ProjectModal(props: ProjectModalProps) {
 
             CreateProject(request).then(() => {
                 console.log('project created')
-                props.open(false);
+                props.openHandler(false);
                 appDispatch(GetProjects(user.id))
             }).catch(() => {
                 console.log('project creation failed')
@@ -122,7 +122,7 @@ function ProjectModal(props: ProjectModalProps) {
 
             UpdateProject(request).then(() => {
                 console.log('project updated')
-                props.open(false);
+                props.openHandler(false);
                 appDispatch(GetProjects(user.id))
             }).catch(() => {
                 console.log('project update failed')
@@ -139,43 +139,49 @@ function ProjectModal(props: ProjectModalProps) {
     }
 
     return (
-        <Modal open={props.open}>
-            <div className="project-create-container">
-                <h2 className='create-project-header'>{props.isEdit ? 'Edit' : 'Create A'} Project</h2>
-                <hr />
-                <div className='input-container'>
-                    <label htmlFor="name">Title of the project</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={title}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <div className='input-error'>{titleError}</div>
-                </div>
-                <div className='input-container'>
-                    <GoogleAutoComplete setAddress={handAddressChange} />
-                    <div className='input-error'>{coordinatesError}</div>
-                </div>
-                <div className='input-container'>
-                    <label htmlFor="description">Enter your description of your project here</label>
-                    <div className='input-error'>{descriptionError}</div>
-                    <textarea
-                        name="description"
-                        value={description}
-                        onChange={handleTextareaChange}
-                    >Example: Project includes drywall work, paint touch ups and installation of a door
-                    </textarea>
-                </div>
-                <hr />
-                <div className='button-container'>
-                    <button disabled={!canCreate} onClick={onClickHandler}>{props.isEdit ? 'Edit' : 'Create'} Project</button>
-                    <button onClick={() => props.open(false)}>Cancel</button>
-                </div>
-            </div>
-        </Modal>
+        <>
+            {props && props.open &&
+                <Modal open={props.openHandler}>
+                    <div className="project-create-container">
+                        <h2 className='create-project-header'>{props.isEdit ? 'Edit' : 'Create A'} Project</h2>
+                        <hr />
+                        <div className='input-container'>
+                            <label htmlFor="name">Title of the project</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={title}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <div className='input-error'>{titleError}</div>
+                        </div>
+                        <div className='input-container'>
+                            <label htmlFor="address" >Location</label>
+                            <GoogleAutoComplete text={address} setAddress={handAddressChange} />
+                            <div className='input-error'>{coordinatesError}</div>
+                        </div>
+                        <div className='input-container'>
+                            <label htmlFor="description">Enter your description of your project here</label>
+                            <div className='input-error'>{descriptionError}</div>
+                            <textarea
+                                name="description"
+                                value={description}
+                                onChange={handleTextareaChange}
+                            >Example: Project includes drywall work, paint touch ups and installation of a door
+                            </textarea>
+                        </div>
+                        <hr />
+                        <div className='button-container'>
+                            <button disabled={!canCreate} onClick={onClickHandler}>{props.isEdit ? 'Edit' : 'Create'} Project</button>
+                            <button onClick={() => props.openHandler(false)}>Cancel</button>
+                        </div>
+                    </div>
+                </Modal>
+            }
+        </>
+
     )
 }
 
