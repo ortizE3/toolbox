@@ -4,7 +4,14 @@ import { User } from "../User/User"
 const initialState: User = {
     id: "",
     name: "",
-    email: ""
+    email: "",
+    addressId: "",
+    address: {
+        name: "",
+        latitude: 0,
+        longitude: 0,
+        addressId: "",
+    },
 }
 
 

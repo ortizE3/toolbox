@@ -9,8 +9,7 @@ import { CreateProjectRequest } from '../../Models/Projects/CreateProjectRequest
 import { GetProjects } from '../../Actions/ProjectActions';
 import { useAppDispatch } from '../../main';
 import GoogleAutoComplete from '../GoogleAutoComplete/GoogleAutoComplete';
-import { getGeocode, getLatLng } from 'use-places-autocomplete';
-import { Coordinates } from '../../Models/Shared/Coordinates'
+import { Address } from '../../Models/Address/Address'
 
 import './ProjectModal.css'
 import { Project } from '../../Models/Projects/Project';
@@ -19,13 +18,12 @@ function ProjectModal(props: ProjectModalProps) {
 
     const [title, setTitle] = useState<string>(props.project?.title ?? '');
     const [description, setDescription] = useState<string>(props.project?.description ?? '');
-    const [address, setAddress] = useState<string>(props.project?.address ?? '');
-    const [coordinates, setCoordinates] = useState<Coordinates>();
+    const [address, setAddress] = useState<Address>(props.project?.address ?? new Address());
     const user = useSelector((state: AppState) => state.user);
 
     const [titleError, setTitleError] = useState<string>("");
     const [descriptionError, setDescriptionError] = useState<string>("");
-    const [coordinatesError, setCoordinatesError] = useState<string>("");
+    const [addressError, setAddressError] = useState<string>("");
     const [canCreate, setCanCreate] = useState<boolean>(false);
 
     const appDispatch = useAppDispatch();
@@ -47,21 +45,16 @@ function ProjectModal(props: ProjectModalProps) {
     }, [description]);
 
     useEffect(() => {
-        if (!address || !coordinates || !coordinates.lat || !coordinates.lng) {
-            setCoordinatesError(ERROR.CREATE_PROJECT_ERROR.LOCATION_EMPTY)
+        if (!address || !address.latitude || !address.longitude || address.name === '') {
+            setAddressError(ERROR.CREATE_PROJECT_ERROR.LOCATION_EMPTY)
         } else {
-            setCoordinatesError("")
+            setAddressError("")
         }
-    }, [coordinates])
+    }, [address])
 
     useEffect(() => {
         setCanCreate(!titleError && !descriptionError && description !== '' && title !== '')
     }, [titleError, descriptionError, title, description])
-
-    useEffect(() => {
-        setCoordinatesHandler()
-    }, [address])
-
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -71,30 +64,23 @@ function ProjectModal(props: ProjectModalProps) {
         setDescription(event.target.value);
     };
 
-    const handAddressChange = (event: any) => {
-        if (event && event.length > 0) {
-            setAddress(event[0].formatted_address)
-        }
-    }
-
-    const setCoordinatesHandler = async () => {
+    const handAddressChange = (address: Address) => {
         if (address) {
-            const results = await getGeocode({ address });
-            const { lat, lng } = await getLatLng(results[0]);
-            setCoordinates(prev => ({ ...prev, lat, lng }));
-            console.log(lat, lng, address)
+            setAddress(address)
         }
     }
 
     const createProjectHandler = () => {
-        if (canCreate && coordinates && address) {
+        if (canCreate && address) {
             let request: CreateProjectRequest = {
                 title: title,
                 description: description,
                 userId: user.id,
-                latitude: coordinates?.lat,
-                longitude: coordinates?.lng,
-                address: address
+                addressRequest: {
+                    latitude: address.latitude,
+                    longitude: address.longitude,
+                    name: address.name,
+                }
             };
 
             CreateProject(request).then(() => {
@@ -109,18 +95,16 @@ function ProjectModal(props: ProjectModalProps) {
 
 
     const UpdateProjectHandler = () => {
-        if (canCreate && coordinates && address && props?.project?.projectId) {
-            let request: Project = {
-                projectId: props.project?.projectId,
-                title: title,
-                description: description,
-                userId: user.id,
-                latitude: coordinates?.lat,
-                longitude: coordinates?.lng,
-                address: address
+        if (canCreate && address && props?.project?.projectId) {
+            let editProjectRequest: Project = props.project;
+            editProjectRequest.title = title;
+            editProjectRequest.description = description;
+            editProjectRequest.address = {
+                ...address,
+                addressId: props.project?.addressId,
             };
 
-            UpdateProject(request).then(() => {
+            UpdateProject(editProjectRequest).then(() => {
                 console.log('project updated')
                 props.openHandler(false);
                 appDispatch(GetProjects(user.id))
@@ -159,8 +143,8 @@ function ProjectModal(props: ProjectModalProps) {
                         </div>
                         <div className='input-container'>
                             <label htmlFor="address" >Location</label>
-                            <GoogleAutoComplete text={address} setAddress={handAddressChange} />
-                            <div className='input-error'>{coordinatesError}</div>
+                            <GoogleAutoComplete address={address} setAddress={handAddressChange} />
+                            <div className='input-error'>{addressError}</div>
                         </div>
                         <div className='input-container'>
                             <label htmlFor="description">Enter your description of your project here</label>

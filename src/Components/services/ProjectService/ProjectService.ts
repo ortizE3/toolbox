@@ -25,9 +25,9 @@ export const GetAllProjects = async (userId: string): Promise<Project[]> => {
     }
 };
 
-export const DeleteProject = async (projectId: string): Promise<void> => {
+export const DeleteProject = async (projectId: string, userId: string): Promise<void> => {
     try {
-        await axios.delete(`${API_BASE_URL}/Project?projectId=${projectId}`);
+        await axios.delete(`${API_BASE_URL}/Project?projectId=${projectId}&userId=${userId}`);
     } catch (error) {
         console.error(`Error Deleting project ${projectId}:`, error);
         throw error;

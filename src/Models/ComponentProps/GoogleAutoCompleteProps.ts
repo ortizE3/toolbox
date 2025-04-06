@@ -1,5 +1,7 @@
+import { Address } from "../Address/Address";
+
 export class GoogleAutoCompleteProps {
     className?: string = '';
     setAddress: any;
-    text: string = ''
+    address: Address = new Address();
 }

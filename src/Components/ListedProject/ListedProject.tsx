@@ -16,7 +16,7 @@ function ListedProject(props: Project) {
 
     const deleteProjectHandler = () => {
         if (props.projectId && user.id) {
-            DeleteProject(props.projectId).then(() => {
+            DeleteProject(props.projectId, user.id).then(() => {
                 appDispatch(GetProjects(user.id))
             }).catch(() => {
                 console.error('error deleting project by id')
@@ -33,7 +33,7 @@ function ListedProject(props: Project) {
             <div>{props.title}</div>
             <div>{props.description}</div>
             <div>{props.projectId}</div>
-            <div>{props.address}</div>
+            <div>{props.address.name}</div>
             <div className="listed-project-button-group">
                 <button onClick={editProjectHandler}>Edit</button>
                 <button onClick={deleteProjectHandler}>Cancel</button>

@@ -6,7 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 import './App.css'
 import Loading from './Components/Loading/Loading'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { CreateUser, GetUser } from './Components/services/UserService.ts/UserService'
 import { CreateUserRequest } from './Models/User/CreateUserRequest'
 import { useDispatch } from 'react-redux'
@@ -14,6 +14,7 @@ import { GetUserCompleted } from './Actions/UserActions'
 
 function App() {
   const { isAuthenticated, isLoading, user } = useAuth0();
+  const [isError, setIsError] = useState(false);
   const dispatch = useDispatch()
 
   useEffect(() => {

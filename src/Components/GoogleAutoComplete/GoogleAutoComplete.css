@@ -1,3 +1,16 @@
 .google-auto-complete-input {
     width: 100%;
 }
+
+.default-address {
+    display: flex;
+    font-size: small;
+}
+
+.checkbox {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #fff;
+    cursor: pointer;
+}

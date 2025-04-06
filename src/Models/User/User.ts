@@ -1,10 +1,9 @@
+import { Address } from "../Address/Address";
+
 export class User {
-    constructor() {
-        this.id = ""
-        this.email = "";
-        this.name = ""
-    }
-    id: string;
-    email: string;
-    name: string;
+    id: string = '';
+    email: string = '';
+    name: string = '';
+    addressId?: string = '';
+    address: Address = new Address();
 }
