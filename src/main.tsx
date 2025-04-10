@@ -2,11 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Auth0Provider } from '@auth0/auth0-react'
 import { BrowserRouter } from 'react-router'
-import AllReducers from './Reducers/AllReducers.ts'
-import { applyMiddleware, createStore } from '@reduxjs/toolkit'
+import { AllReducers } from './Reducers/AllReducers.ts'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider, useDispatch } from 'react-redux'
 import App from './App.tsx'
-import { thunk } from 'redux-thunk';
+
 import './Classes/button.css';
 import './Classes/input.css';
 import './Classes/textarea.css';
@@ -14,23 +14,18 @@ import './Classes/hr.css';
 
 import './index.css'
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION__?: () => any;
-  }
-}
+const appState = configureStore({
 
+  reducer: {
+    ...AllReducers,
+  },
+  middleware: (getDefaultMiddleware: any) => getDefaultMiddleware(),
+  devTools: process.env.NODE_ENV !== 'production',
+} as any);
 
-
-const appState = createStore(AllReducers,
-  applyMiddleware(thunk));
-
-
-
-export type RootState = ReturnType<typeof appState.getState>;
 export type AppDispatch = typeof appState.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
-export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

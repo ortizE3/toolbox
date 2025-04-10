@@ -17,7 +17,6 @@ const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS;
 
 const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
     const [googleAddress, setGoogleAddress] = useState<any>();
-    const [text, setText] = useState<string>(props.address?.name ?? '');
     const user = useSelector((state: AppState) => state.user);
     const [isDefaultAddress, setDefaultAddress] = useState<boolean>();
     const appDispatch = useAppDispatch();
@@ -30,6 +29,20 @@ const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
     });
 
     useEffect(() => {
+        if (user && user.addressId && user.address && !isDefaultAddress) {
+            setDefaultAddress(true)
+            props.setAddress(user.address)
+        }
+    }, [user])
+
+    useEffect(() => {
+        if (props.address && props.address.name && props.address.name !== user.address?.name) {
+            setDefaultAddress(false)
+        }
+    }, [props.address, user])
+
+    const onAddressChange = () => {
+        let googleAddress = inputRef.current.getPlaces();
         const fetchCoordinates = async () => {
             if (googleAddress && googleAddress.length > 0) {
 
@@ -37,27 +50,10 @@ const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
                 const results = await getGeocode({ address: addressName });
                 const { lat, lng } = await getLatLng(results[0]);
                 let address: Address = { latitude: lat, longitude: lng, name: addressName };
-                props.setAddress(address);
+                //props.setAddress(address);
             }
         };
         fetchCoordinates();
-    }, [googleAddress]);
-
-    useEffect(() => {
-        if (props.address.name) {
-            setText(props.address.name)
-        }
-    }, [props.address])
-
-    useEffect(() => {
-        if (user && user.addressId && user.address) {
-            setDefaultAddress(!!user.addressId)
-            props.setAddress(user.address)
-        }
-    }, [user])
-
-    const onAddressChange = () => {
-        setGoogleAddress(inputRef.current.getPlaces());
     }
 
     const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,8 +90,8 @@ const GoogleAutoComplete = (props: GoogleAutoCompleteProps) => {
                             type="text"
                             id="address"
                             name="address"
-                            value={text}
-                            onChange={(e) => { setText(e.target.value) }}
+                            value={props.address?.name ?? ''}
+                            onChange={(e) => { props.setAddress({ ...props.address, name: e.target.value }) }}
                             placeholder=""
                         />
                     </StandaloneSearchBox>

@@ -1,10 +1,7 @@
-import { combineReducers } from "@reduxjs/toolkit";
 import UserReducer from "./UserReducer";
 import ProjectReducer from "./ProjectReducer";
 
-const AllReducers = combineReducers({
+export const AllReducers = {
     user: UserReducer,
     projects: ProjectReducer
-})
-
-export default AllReducers
+};

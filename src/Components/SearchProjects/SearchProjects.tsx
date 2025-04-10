@@ -19,11 +19,11 @@ function SearchProjects() {
                 userLongitude: address.longitude
             }
 
-            QueryProjects(request).then((projects: Project[]) => {
-                setProjects(projects)
-            }).then(() => {
-                console.error('project search failed')
-            })
+            // QueryProjects(request).then((projects: Project[]) => {
+            //     setProjects(projects)
+            // }).then(() => {
+            //     console.error('project search failed')
+            // })
         }
     }, [address])
 
